@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 
-const AutocompleteInput: React.FC = () => {
+const MagicCardSearchInput: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -22,6 +24,7 @@ const AutocompleteInput: React.FC = () => {
           throw new Error('Error fetching suggestions');
         }
         const data = await response.json();
+        console.log('Suggestions received:', data.suggestions);
         setSuggestions(data.suggestions);
       } catch (err) {
         if (err instanceof Error) {
@@ -43,22 +46,24 @@ const AutocompleteInput: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    setSuggestions([]); 
   };
 
   return (
-    <div>
+    <div className="w-full max-w-md">
       <input
         type="text"
         value={inputValue}
         onChange={handleChange}
         placeholder="Type to search..."
-        className="p-2 border rounded"
+        className="w-full p-2 border rounded text-black bg-white"
+        style={{ color: 'black' }}
       />
-      {isLoading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <ul className="mt-2 border rounded">
+      {isLoading && <p className="mt-2" style={{ color: 'black' }}>Loading...</p>}
+      {error && <p className="mt-2" style={{ color: 'black' }}>{error}</p>}
+      <ul className="mt-2 border rounded bg-white text-black">
         {suggestions.map((suggestion, index) => (
-          <li key={index} className="p-2 hover:bg-gray-200">
+          <li key={index} className="p-2 hover:bg-gray-200" style={{ color: 'black' }}>
             {suggestion}
           </li>
         ))}
@@ -67,4 +72,4 @@ const AutocompleteInput: React.FC = () => {
   );
 };
 
-export default AutocompleteInput;
+export default MagicCardSearchInput;
